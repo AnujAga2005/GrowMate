@@ -279,17 +279,17 @@ export function Signup({ onSwitchToLogin, isDark, onToggleTheme }: SignupProps) 
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className={`px-4 ${isDark ? 'bg-slate-800/50 text-gray-400' : 'bg-white/80 text-gray-500'}`}>
-                  Or continue with
+                  {/* Or continue with */}
                 </span>
               </div>
             </div>
 
             {/* Google Sign In Button */}
-            <GoogleSignInButton isDark={isDark} />
+            {/* <GoogleSignInButton isDark={isDark} /> */}
           </form>
 
           {/* Divider */}
-          <div className="relative my-6">
+          {/* <div className="relative my-6">
             <div className={`absolute inset-0 flex items-center`}>
               <div className={`w-full border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`} />
             </div>
@@ -300,11 +300,11 @@ export function Signup({ onSwitchToLogin, isDark, onToggleTheme }: SignupProps) 
                 or
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* Switch to Login */}
           <div className="text-center">
-            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-sm mt-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               Already have an account?{' '}
               <button
                 type="button"
@@ -335,7 +335,7 @@ export function Signup({ onSwitchToLogin, isDark, onToggleTheme }: SignupProps) 
           <Sparkles className={`inline-block w-4 h-4 mr-2 ${
             isDark ? 'text-emerald-400' : 'text-purple-500'
           }`} />
-          Demo Mode: Your data will be stored locally in your browser
+          {/* Demo Mode: Your data will be stored locally in your browser */}
         </motion.div>
       </motion.div>
     </div>

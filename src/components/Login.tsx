@@ -219,16 +219,16 @@ export function Login({ onSwitchToSignup, isDark, onToggleTheme }: LoginProps) {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className={`px-4 ${isDark ? 'bg-slate-800/50 text-gray-400' : 'bg-white/80 text-gray-500'}`}>
-                  Or continue with
+                  {/* Or continue with */}
                 </span>
               </div>
             </div>
 
             {/* Google Sign In Button */}
-            <GoogleSignInButton isDark={isDark} />
+            {/* <GoogleSignInButton isDark={isDark} /> */}
           </form>
 
-          {/* Divider */}
+          {/* Divider
           <div className="relative my-6">
             <div className={`absolute inset-0 flex items-center`}>
               <div className={`w-full border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`} />
@@ -240,11 +240,11 @@ export function Login({ onSwitchToSignup, isDark, onToggleTheme }: LoginProps) {
                 or
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* Switch to Signup */}
           <div className="text-center">
-            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-sm mt-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               Don't have an account?{' '}
               <button
                 type="button"
@@ -275,7 +275,7 @@ export function Login({ onSwitchToSignup, isDark, onToggleTheme }: LoginProps) {
           <Sparkles className={`inline-block w-4 h-4 mr-2 ${
             isDark ? 'text-emerald-400' : 'text-purple-500'
           }`} />
-          Demo Mode: Use any email and password to login
+          {/* Demo Mode: Use any email and password to login */}
         </motion.div>
       </motion.div>
     </div>
