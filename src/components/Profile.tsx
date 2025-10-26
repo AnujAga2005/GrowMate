@@ -69,9 +69,11 @@ export function Profile({ habits, userLevel, userStreak, onNavigateToLanding }: 
     confettiAnimation: true
   });
 
-  // Real achievements from backend
+  // Real achievements and badges from backend
   const [achievements, setAchievements] = useState([]);
+  const [badges, setBadges] = useState([]);
   const [loadingAchievements, setLoadingAchievements] = useState(true);
+  const [loadingBadges, setLoadingBadges] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [exporting, setExporting] = useState(false);
 
@@ -90,6 +92,23 @@ export function Profile({ habits, userLevel, userStreak, onNavigateToLanding }: 
     };
 
     fetchAchievements();
+  }, []);
+
+  // Fetch user badges
+  useEffect(() => {
+    const fetchBadges = async () => {
+      try {
+        setLoadingBadges(true);
+        const response = await userService.getBadges();
+        setBadges(response.badges);
+      } catch (error) {
+        console.error('Failed to fetch badges:', error);
+      } finally {
+        setLoadingBadges(false);
+      }
+    };
+
+    fetchBadges();
   }, []);
 
   // Calculate user stats
@@ -427,55 +446,108 @@ export function Profile({ habits, userLevel, userStreak, onNavigateToLanding }: 
             </motion.div>
           </div>
 
-          {/* Recent Activity */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gray-200/50 dark:border-slate-600/50 shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Recent Achievements
-              </h3>
-              
-              {loadingAchievements ? (
-                <div className="text-center py-8">
-                  <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                  <p className="text-gray-600 dark:text-gray-300">Loading achievements...</p>
-                </div>
-              ) : achievements.length > 0 ? (
-                <div className="space-y-3">
-                  {achievements.slice(0, 4).map((achievement, index) => (
-                    <motion.div
-                      key={achievement._id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.7 + index * 0.1 }}
-                      className="flex items-center space-x-4 p-3 rounded-lg bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700/80 transition-colors"
-                    >
-                      <div className="text-2xl">{achievement.icon}</div>
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900 dark:text-white">
-                          {achievement.title}
+          {/* Recent Badges & Achievements */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Unlocked Badges */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gray-200/50 dark:border-slate-600/50 shadow-lg">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                  Unlocked Badges 🏅
+                </h3>
+                
+                {loadingBadges ? (
+                  <div className="text-center py-8">
+                    <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <p className="text-gray-600 dark:text-gray-300">Loading badges...</p>
+                  </div>
+                ) : badges.length > 0 ? (
+                  <div className="space-y-3">
+                    {badges.slice(0, 3).map((userBadge, index) => (
+                      <motion.div
+                        key={userBadge._id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.7 + index * 0.1 }}
+                        className="flex items-center space-x-4 p-3 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-500/30"
+                      >
+                        <div className="text-3xl">{userBadge.badge.icon}</div>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-white">
+                            {userBadge.badge.name}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-300">
+                            {userBadge.badge.description}
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-300">
-                          {achievement.description}
+                        <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
+                          {userBadge.badge.tier}
+                        </Badge>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-2">🏅</div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">No badges yet. Complete habits to earn badges!</p>
+                  </div>
+                )}
+              </Card>
+            </motion.div>
+
+            {/* Recent Achievements */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gray-200/50 dark:border-slate-600/50 shadow-lg">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                  Recent Achievements 🎯
+                </h3>
+                
+                {loadingAchievements ? (
+                  <div className="text-center py-8">
+                    <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <p className="text-gray-600 dark:text-gray-300">Loading achievements...</p>
+                  </div>
+                ) : achievements.length > 0 ? (
+                  <div className="space-y-3">
+                    {achievements.slice(0, 3).map((achievement, index) => (
+                      <motion.div
+                        key={achievement._id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.8 + index * 0.1 }}
+                        className="flex items-center space-x-4 p-3 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-500/30"
+                      >
+                        <div className="text-2xl">{achievement.icon}</div>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-white">
+                            {achievement.title}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-300">
+                            {achievement.description}
+                          </div>
                         </div>
-                      </div>
-                      <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
-                        +{achievement.xpEarned} XP
-                      </Badge>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="text-4xl mb-2">🏆</div>
-                  <p className="text-gray-600 dark:text-gray-300">No achievements yet. Keep building habits!</p>
-                </div>
-              )}
-            </Card>
-          </motion.div>
+                        <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs">
+                          +{achievement.xpEarned} XP
+                        </Badge>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-2">🎯</div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">No achievements yet. Keep building habits!</p>
+                  </div>
+                )}
+              </Card>
+            </motion.div>
+          </div>
         </TabsContent>
 
         {/* Settings Tab */}
@@ -518,13 +590,78 @@ export function Profile({ habits, userLevel, userStreak, onNavigateToLanding }: 
 
         {/* Achievements Tab */}
         <TabsContent value="achievements" className="space-y-6">
+          {/* Badges Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gray-200/50 dark:border-slate-600/50 shadow-lg">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                All Achievements
+                Your Badges 🏅
+              </h3>
+              
+              {loadingBadges ? (
+                <div className="text-center py-12">
+                  <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-300">Loading badges...</p>
+                </div>
+              ) : badges.length > 0 ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {badges.map((userBadge, index) => (
+                    <motion.div
+                      key={userBadge._id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-500/30"
+                    >
+                      <div className="text-4xl">{userBadge.badge.icon}</div>
+                      <div className="flex-1">
+                        <div className="font-bold text-gray-900 dark:text-white">
+                          {userBadge.badge.name}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">
+                          {userBadge.badge.description}
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs">
+                            {userBadge.badge.tier}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {userBadge.badge.rarity}
+                          </Badge>
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                          Earned {new Date(userBadge.earnedAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">🏅</div>
+                  <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
+                    No badges yet
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Complete habits and unlock badges in the Rewards section!
+                  </p>
+                </div>
+              )}
+            </Card>
+          </motion.div>
+
+          {/* Achievements Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gray-200/50 dark:border-slate-600/50 shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                All Achievements 🎯
               </h3>
               
               {loadingAchievements ? (
@@ -563,7 +700,7 @@ export function Profile({ habits, userLevel, userStreak, onNavigateToLanding }: 
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <div className="text-6xl mb-4">🏆</div>
+                  <div className="text-6xl mb-4">🎯</div>
                   <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
                     No achievements yet
                   </h3>

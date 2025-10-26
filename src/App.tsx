@@ -366,6 +366,10 @@ function AppContent() {
             onToggleHabit={toggleHabit}
             onViewHabit={setSelectedHabit}
             userStreak={userStreak}
+            onAddHabit={() => setShowAddModal(true)}
+            userLevel={userLevel}
+            userXP={userXP}
+            onNavigateToAnalytics={() => setCurrentPage('analytics')}
           />
         );
     }
