@@ -29,9 +29,7 @@ const UserSchema = new mongoose.Schema(
     },
     googleId: {
       type: String,
-      unique: true,
-      sparse: true,
-      default: null
+      sparse: true
     },
     authProvider: {
       type: String,
@@ -101,6 +99,9 @@ const UserSchema = new mongoose.Schema(
 // Indexes
 UserSchema.index({ email: 1 });
 UserSchema.index({ createdAt: -1 });
+// Create a unique sparse index on googleId to allow multiple null values
+// but ensure googleId is unique when it exists
+UserSchema.index({ googleId: 1 }, { unique: true, sparse: true, partialFilterExpression: { googleId: { $exists: true, $ne: null } } });
 
 // Virtual for habits count
 UserSchema.virtual('habits', {
