@@ -20,6 +20,3 @@ logs/
 dist/
 build/
 .vite/
-package-lock.json
-yarn.lock
-backend/package-lock.json
