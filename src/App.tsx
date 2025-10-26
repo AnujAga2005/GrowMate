@@ -28,6 +28,7 @@ import { Gamification } from "./components/Gamification";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { OAuthCallback } from "./components/OAuthCallback";
+import { DebugPanel } from "./components/DebugPanel";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner@2.0.3";
 import { habitService } from "./services/habitService";
@@ -609,6 +610,7 @@ export default function App() {
     <AuthProvider>
       <AppContent />
       <Toaster />
+      <DebugPanel />
     </AuthProvider>
   );
 }
