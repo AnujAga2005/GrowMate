@@ -3,7 +3,7 @@
  * Centralized API configuration and request handling
  */
 
-const API_BASE_URL = (import.meta?.env?.VITE_API_URL as string | undefined) || 'http://localhost:5001/api';
+const API_BASE_URL = (import.meta?.env?.VITE_API_URL as string | undefined) || 'http://localhost:8080/api';
 
 console.log('🔧 API Configuration:', {
   VITE_API_URL: import.meta?.env?.VITE_API_URL,
