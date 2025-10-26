@@ -3,11 +3,17 @@
  * Centralized API configuration and request handling
  */
 
-const API_BASE_URL = (import.meta?.env?.VITE_API_URL as string | undefined) || 'http://localhost:8080/api';
+// Priority: VITE_API_URL from environment, fallback to localhost
+const VITE_API_URL_FROM_ENV = import.meta?.env?.VITE_API_URL as string | undefined;
+const API_BASE_URL = VITE_API_URL_FROM_ENV || 'http://localhost:8080/api';
 
 console.log('🔧 API Configuration:', {
-  VITE_API_URL: import.meta?.env?.VITE_API_URL,
-  API_BASE_URL,
+  'import.meta.env exists': typeof import.meta !== 'undefined' && import.meta.env != null,
+  'VITE_API_URL (raw)': VITE_API_URL_FROM_ENV,
+  'VITE_API_URL is defined': !!VITE_API_URL_FROM_ENV,
+  'API_BASE_URL (computed)': API_BASE_URL,
+  'Using localhost fallback': !VITE_API_URL_FROM_ENV,
+  'All env keys': (typeof import.meta !== 'undefined' && import.meta.env != null) ? Object.keys(import.meta.env) : [],
   timestamp: new Date().toISOString()
 });
 
